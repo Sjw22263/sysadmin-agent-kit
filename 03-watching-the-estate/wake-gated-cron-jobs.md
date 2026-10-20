@@ -30,7 +30,7 @@ A healthy tick from our watchdog prints a single JSON object with `"wakeAgent": 
 
 ## Use a script for yes-or-no questions
 
-If the question is a deterministic check over local state (does this file exist, did this happen in the last day, is this process running), answer it in a script, not a model. We had an agent job that ran the right search, got the right answer, and reported the opposite in its final message. A script cannot contradict its own `if` statement.
+If the question is a deterministic check over local state (does this file exist, did this happen in the last day, is this process running), answer it in a script, not a model. We had a midday agent job whose only task was to check whether the operator had been in contact in the last 23 hours, and send a reminder if not. The agent searched the session history, found the previous evening's conversation, and sent the reminder anyway. The fix was to remove the model: a script now queries the session database directly and emits the reminder only when there has been no contact. A script cannot contradict its own `if` statement.
 
 ## When the message format matters, do not leave it to the model
 

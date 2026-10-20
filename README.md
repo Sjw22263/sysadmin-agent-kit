@@ -10,6 +10,7 @@ They are working documents, generalised for public use. They have not been teste
 |---|---|---|
 | `01-giving-the-agent-a-job/` | [Part 1: Giving the agent a job](https://onet.com.au/blog/sysadmin-agent-guide-part-1/) | Stop the agent rewriting its own procedures; the first brief; an identity file; an operating mandate. |
 | `02-commissioning-the-agent/` | [Part 2: Commissioning the agent](https://onet.com.au/blog/sysadmin-agent-guide-part-2/) | Accounts, proven access, discovery, the first repair, email trust, and a script-only morning health check. |
+| `03-watching-the-estate/` | [Part 3: Watching the estate](https://onet.com.au/blog/sysadmin-agent-guide-part-3/) | Wake the agent only for confirmed faults: alert gating, safe repair, honest reporting, wake-gated cron jobs and a log notifier. |
 
 More folders will be added as the series continues.
 

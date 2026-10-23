@@ -12,6 +12,7 @@ They are working documents, generalised for public use. They have not been teste
 | `02-commissioning-the-agent/` | [Part 2: Commissioning the agent](https://onet.com.au/blog/sysadmin-agent-guide-part-2/) | Accounts, proven access, discovery, the first repair, email trust, and a script-only morning health check. |
 | `03-watching-the-estate/` | [Part 3: Watching the estate](https://onet.com.au/blog/sysadmin-agent-guide-part-3/) | Wake the agent only for confirmed faults: alert gating, safe repair, honest reporting, wake-gated cron jobs and a log notifier. |
 | `04-owning-the-maintenance/` | [Part 4: Owning the maintenance](https://onet.com.au/blog/sysadmin-agent-guide-part-4/) | Routine duties with a control for each, package policy, backups that can be trusted, power-failure recovery, verify before retry, and a backup-check template. |
+| `05-reflection-that-changes-work/` | [Part 5: Reflection that changes work](https://onet.com.au/blog/sysadmin-agent-guide-part-5/) | Bounded improvement research, specific lessons for the next run, a human review route and trials that can be dropped as well as kept. |
 
 More folders will be added as the series continues.
 

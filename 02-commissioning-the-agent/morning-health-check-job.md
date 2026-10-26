@@ -19,7 +19,7 @@ Scheduled with `--no-agent`, the script is the whole job. No model runs, so it c
 
 Our first scheduled version was exactly this. The judgement work, deciding what a fault means and fixing what the script cannot, comes later and only when the script finds a fault (part 3).
 
-`morning-health-check.sh` is a template of this shape. Customise it with your agent, then run it by hand with `DRY_RUN=1` until the report reads correctly, then for real until you have received it.
+`morning-health-check.sh` is a template of this shape. Customise it with your agent, then run it by hand with `DRY_RUN=1` until the report reads correctly, then for real until you have received it. `DRY_RUN=1` makes no changes and sends nothing: a stopped service on the restart list is reported as "would restart". An earlier version of this template still restarted services in a dry run; if you copied it before 23 October 2026, replace it.
 
 ## The report
 

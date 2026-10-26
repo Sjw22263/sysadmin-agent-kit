@@ -5,9 +5,21 @@ Part of "Guide for building an autonomous agentic system administrator", part 3.
 Licensed under CC BY 4.0. Adapted from working documents developed by
 Steve Waddington and Maxi Calder, his sysadmin agent.
 
+Version: revised 23 October 2026. Hermes wake-gate behaviour checked against
+Hermes Agent upstream commit e1fdf003 (5 October 2026).
+
 This is a generalised starting point, not our production watchdog. It runs its
 own tests (`python3 watchdog-gate.py --self-test`) and nothing else has been
 verified. Write your probes with your agent; keep the gate a pure function.
+
+Until you wire in probes, running it reports UNCONFIGURED and wakes the agent,
+so a scheduled copy that nobody finished can never look healthy. Use `--demo`
+to see the healthy skip output. Earlier versions printed "healthy" when
+unconfigured; if you copied one, replace it.
+
+You must persist State between runs (a small JSON file is enough) and stop two
+runs overlapping (for example with a lock file), or the consecutive-failure
+counts and alert suppression will not work.
 
 Rules implemented (see server-health-monitoring.md):
   1. A failed scheduled check only counts if the immediate repeat also fails.
@@ -17,6 +29,8 @@ Rules implemented (see server-health-monitoring.md):
   5. Apex and www checks for one site share a failure domain.
   6. Identical alerts are suppressed for ALERT_REPEAT_SECONDS.
   7. A crashed checker is never mistaken for a recovery.
+  8. A failed check with no repeat result is UNKNOWN, treated as a confirmed
+     failure, never as a recovery.
 
 The script prints one JSON line. With a Hermes agent-mode cron job, a JSON
 object containing "wakeAgent": false on the last line skips the model run.
@@ -63,6 +77,13 @@ def gate(scheduled: list[Result], repeat: list[Result], state: State, now: float
     # repeat probe through: it never appears in failed_names, and dropping it
     # would make a broken checker look like a recovery.
     confirmed = [r for r in repeat if not r.ok and (r.name in failed_names or r.name == PROBE_EXCEPTION)]
+    # A scheduled failure whose repeat result is simply missing is UNKNOWN.
+    # Absence of evidence is not a recovery, so count it as confirmed.
+    repeated_names = {r.name for r in repeat}
+    confirmed += [Result(r.name, False, r.severe, r.area,
+                         (r.detail + "; " if r.detail else "") + "UNKNOWN: repeat probe missing")
+                  for r in scheduled
+                  if not r.ok and r.name != PROBE_EXCEPTION and r.name not in repeated_names]
     if any(r.name == PROBE_EXCEPTION for r in scheduled if not r.ok):
         confirmed += [r for r in scheduled if r.name == PROBE_EXCEPTION and r not in confirmed]
 
@@ -108,6 +129,13 @@ def gate(scheduled: list[Result], repeat: list[Result], state: State, now: float
         "failure_counts": counts,
     }
     return payload, State(failure_counts=counts, last_alert=last_alert)
+
+
+def unconfigured_payload() -> dict:
+    """What an unfinished copy reports: never healthy, always wakes."""
+    return {"wakeAgent": True, "status": "unconfigured", "reason": "unconfigured",
+            "issues": ["watchdog-gate.py has no probes wired in; nothing was checked"],
+            "failure_counts": {}}
 
 
 # ---------------------------------------------------------------- self-test
@@ -157,6 +185,17 @@ def _self_test() -> int:
             self.assertTrue(p["wakeAgent"])
             self.assertEqual(p["status"], "degraded")
 
+        def test_missing_repeat_is_unknown_not_recovery(self):
+            p, s = gate([bad("web:example.com", area="web")], [], State(), 0)
+            self.assertEqual(p["status"], "degraded")
+            self.assertEqual(s.failure_counts, {"web:example.com": 1})
+            self.assertIn("UNKNOWN", p["issues"][0])
+
+        def test_unconfigured_run_wakes(self):
+            p = unconfigured_payload()
+            self.assertTrue(p["wakeAgent"])
+            self.assertEqual(p["status"], "unconfigured")
+
         def test_recovery_resets_only_that_counter(self):
             s = State(failure_counts={"web:example.com": 2, "mail:imap": 2})
             r = [bad("mail:imap", area="mail")]
@@ -177,7 +216,12 @@ def _self_test() -> int:
 if __name__ == "__main__":
     if "--self-test" in sys.argv:
         sys.exit(_self_test())
-    # Wire in your own probes and a state file here. Until then, prove the
-    # healthy path prints a skip gate:
-    payload, _ = gate([], [], State(), 0)
-    print(json.dumps(payload, sort_keys=True))
+    if "--demo" in sys.argv:
+        # Demonstration only: shows the healthy skip output.
+        payload, _ = gate([], [], State(), 0)
+        print(json.dumps(payload, sort_keys=True))
+        sys.exit(0)
+    # Replace this with your probes, state load/save and lock. Until then an
+    # unfinished copy reports UNCONFIGURED, wakes the agent and exits non-zero.
+    print(json.dumps(unconfigured_payload(), sort_keys=True))
+    sys.exit(2)

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # morning-health-check.sh - TEMPLATE for a script-only (no-agent) daily health check.
 #
+# Version: revised 23 October 2026 (DRY_RUN now also suppresses restarts).
+# Not Hermes-version-specific; the --no-agent delivery note below was checked
+# against Hermes Agent upstream commit e1fdf003 (5 October 2026).
+#
 # Part of "Guide for building an autonomous agentic system administrator", part 2.
 # Licensed under CC BY 4.0. Adapted from working documents developed by
 # Steve Waddington and Maxi Calder, his sysadmin agent.
@@ -18,7 +22,11 @@
 #     --no-agent job, stdout is delivered to the job's --deliver target
 #     (your urgent channel) and empty stdout is a silent run.
 #
-# Set DRY_RUN=1 to print the report instead of sending it.
+# DRY_RUN=1 makes NO changes and sends NOTHING: services that would have been
+# restarted are reported as "would restart", and the report is printed to
+# stderr instead of being sent. Earlier versions of this template only
+# suppressed sending in DRY_RUN and still restarted allow-listed services;
+# if you copied one, replace it.
 
 set -uo pipefail
 
@@ -68,6 +76,9 @@ check_site() {
 check_local_service() {
   local svc="$1"
   systemctl --user --quiet is-active "$svc" && return
+  if [ "$DRY_RUN" = "1" ] && allowed "$svc" "${LOCAL_RESTART_ALLOWED[@]}"; then
+    issue SERIOUS "DRY RUN: local service $svc is not running (would restart; no change made)"; return
+  fi
   if allowed "$svc" "${LOCAL_RESTART_ALLOWED[@]}" \
      && systemctl --user restart "$svc" && sleep 3 && systemctl --user --quiet is-active "$svc"; then
     fixed "$svc was stopped; restarted and confirmed running"
@@ -79,6 +90,9 @@ check_local_service() {
 check_remote_service() {
   local svc="$1"
   remote "systemctl --quiet is-active '$svc'" && return
+  if [ "$DRY_RUN" = "1" ] && allowed "$svc" "${REMOTE_RESTART_ALLOWED[@]}"; then
+    issue SERIOUS "DRY RUN: $svc on $REMOTE_HOST is not running (would restart; no change made)"; return
+  fi
   if allowed "$svc" "${REMOTE_RESTART_ALLOWED[@]}" \
      && remote "sudo -n systemctl restart '$svc' && sleep 3 && systemctl --quiet is-active '$svc'"; then
     fixed "$svc on $REMOTE_HOST was stopped; restarted and confirmed running"

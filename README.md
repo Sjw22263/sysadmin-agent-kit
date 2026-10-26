@@ -4,6 +4,10 @@ Skills, templates and working documents for setting up an AI agent as a system a
 
 They are working documents, generalised for public use. They have not been tested in this generic form. Treat them as starting points to customise with your own agent, for your own estate. Each file says where to use it and puts the mistakes we made at the point where you would make them.
 
+## Start here: staged authority
+
+[`staged-authority.md`](staged-authority.md) sets out the order in which to hand the agent more authority, from read-only discovery to an outcome-based mandate, and what you should have seen before each step. It also shows which instruction wins when the mandate and a job's own limits disagree. Read it before you adapt the folders below.
+
 ## Contents
 
 | Folder | Post | What it covers |
@@ -13,6 +17,7 @@ They are working documents, generalised for public use. They have not been teste
 | `03-watching-the-estate/` | [Part 3: Watching the estate](https://onet.com.au/blog/sysadmin-agent-guide-part-3/) | Wake the agent only for confirmed faults: alert gating, safe repair, honest reporting, wake-gated cron jobs and a log notifier. |
 | `04-owning-the-maintenance/` | [Part 4: Owning the maintenance](https://onet.com.au/blog/sysadmin-agent-guide-part-4/) | Routine duties with a control for each, package policy, backups that can be trusted, power-failure recovery, verify before retry, and a backup-check template. |
 | `05-reflection-that-changes-work/` | [Part 5: Reflection that changes work](https://onet.com.au/blog/sysadmin-agent-guide-part-5/) | Bounded improvement research, specific lessons for the next run, a human review route and trials that can be dropped as well as kept. |
+| `06-continuity-without-a-memory-landfill/` | [Part 6: Continuity without a memory landfill](https://onet.com.au/blog/sysadmin-agent-guide-part-6/) | Memory as an index and Markdown as the archive, runbook and incident templates, memory review, and a trial for whether an extra memory layer earns its place. |
 
 More folders will be added as the series continues.
 

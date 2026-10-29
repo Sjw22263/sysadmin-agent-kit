@@ -20,6 +20,7 @@ They are working documents, generalised for public use. They have not been teste
 | `06-continuity-without-a-memory-landfill/` | [Part 6: Continuity without a memory landfill](https://onet.com.au/blog/sysadmin-agent-guide-part-6/) | Memory as an index and Markdown as the archive, runbook and incident templates, memory review, and a trial for whether an extra memory layer earns its place. |
 | `07-from-operator-to-estate-overseer/` | [Part 7: From operator to estate overseer](https://onet.com.au/blog/sysadmin-agent-guide-part-7/) | Onboarding a new agent, handing work between agents in plain files, and simplifying an estate with controls on decision provenance and retirement. |
 | `08-the-second-opinion-agent/` | [Part 8: The second opinion agent](https://onet.com.au/blog/sysadmin-agent-guide-part-8/) | An agent whose only job is review: its boundaries and output contract, a request template, and how to test a reviewer before you trust it. |
+| `09-who-may-change-what-the-agent-learns/` | [Part 9: Who may change what the agent learns](https://onet.com.au/blog/sysadmin-agent-guide-part-9/) | Shared methods and local practice, where new skills go, a review route for skill changes with a weekly triage, and a skills taxonomy built for human control. |
 
 More folders will be added as the series continues.
 

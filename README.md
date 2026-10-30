@@ -21,8 +21,9 @@ They are working documents, generalised for public use. They have not been teste
 | `07-from-operator-to-estate-overseer/` | [Part 7: From operator to estate overseer](https://onet.com.au/blog/sysadmin-agent-guide-part-7/) | Onboarding a new agent, handing work between agents in plain files, and simplifying an estate with controls on decision provenance and retirement. |
 | `08-the-second-opinion-agent/` | [Part 8: The second opinion agent](https://onet.com.au/blog/sysadmin-agent-guide-part-8/) | An agent whose only job is review: its boundaries and output contract, a request template, and how to test a reviewer before you trust it. |
 | `09-who-may-change-what-the-agent-learns/` | [Part 9: Who may change what the agent learns](https://onet.com.au/blog/sysadmin-agent-guide-part-9/) | Shared methods and local practice, where new skills go, a review route for skill changes with a weekly triage, and a skills taxonomy built for human control. |
+| `10-the-cost-of-customising-a-fast-moving-harness/` | [Part 10: The cost of customising a fast-moving harness](https://onet.com.au/blog/sysadmin-agent-guide-part-10/) | Every change to the harness's own code as a maintenance commitment: a register of local changes, reconciling them with an upgrade, a guarded cutover with a tested rollback, and a script that captures and compares local changes by content. |
 
-More folders will be added as the series continues.
+The series is complete at ten parts. A later addendum will cover failure modes for persistent long-running tasks in a changing environment.
 
 ## Platform
 
